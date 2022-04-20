@@ -14,20 +14,25 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, unique = true, length = 45)
+	@Column( unique = true, length = 45)
 	private String email;
 	
-	@Column(nullable = false, length = 64)
+	@Column( length = 64)
 	private String password;
 	
-	@Column(name = "first_name", nullable = false, length = 20)
+	@Column(name = "first_name",length = 20)
 	private String firstName;
 	
-	@Column(name = "last_name", nullable = false, length = 20)
+	@Column(name = "last_name", length = 20)
 	private String lastName;
-	
-	
-	
+
+	@Column(name = "destination",length = 20 )
+	private String destination;
+
+	@Column(name = "vehicle_type",length = 20 )
+	private String vehicleType;
+
+
 	
 	
 	public Long getId() {
@@ -59,6 +64,18 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getDestination() {
+		return destination;
+	}
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+	public String getVehicleType() {
+		return vehicleType;
+	}
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
 	}
 
 }
