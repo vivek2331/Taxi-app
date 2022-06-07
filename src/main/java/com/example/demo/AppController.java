@@ -22,7 +22,7 @@ public class AppController {
 	public String viewHomePage() {
 		return "index";
 	}
-
+ 
 	@GetMapping("/register")
 	public String showSignUpForm(Model model){
 		model.addAttribute("user", new User());
@@ -61,37 +61,46 @@ public class AppController {
 		return "homepage";
 	}
 
-//	@PostMapping("/ride")
-//	public String processRide(User user) {
-//
-//
-//		System.out.println("hello");
-//
-//
-//		repo.save(user);
-//
-//		return "register_success";
-//	}
+	@GetMapping("/ride")
+	public String processRide(@ModelAttribute User user, Model model) {
 
+		model.addAttribute("user", user);
+
+
+		return "Ride";
+	}
+
+	// @PutMapping("/ride")
+	// public String processRide(User user) {
+
+
+	// 	System.out.println("hello");
+
+
+	// 	repo.save(user);
+
+	// 	return "register_success";
+	// }
+
+	// @PutMapping("/update/{id}")
+	// public String updateUser(@PathVariable("id") long id,User user) {
+
+
+	// 	repo.save(user);
+	// 	return "register_success";
+	// }
 //	@PostMapping("/update/{id}")
-//	public String updateUser(@PathVariable("id") long id,User user) {
-//
-//
-//		repo.save(user);
-//		return "register_success";
-//	}
-	@PostMapping("/update/{id}")
-	public String viewRide(@PathVariable("id") long id,@ModelAttribute User user) {
+//	public String viewRide(@PathVariable("id") long id,@ModelAttribute User user) {
 //		Logger logger = LoggerFactory.getLogger(vi.class);
-		Optional<User> user1 = repo.findById(id);
+//		Optional<User> user1 = repo.findById(id);
 //		logger.info("An INFO Message");
 //
 
 
-		repo.save(user);
-		return "homepage" ;
+//		repo.save(user);
+//		return "homepage" ;
 
-	}
+//	}
 
 
 }
