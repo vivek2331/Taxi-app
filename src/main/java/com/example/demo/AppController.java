@@ -2,6 +2,8 @@ package com.example.demo;
 
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.List;
+import java.security.Principal;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+// import antlr.collections.List;
 
 @Controller
 public class AppController {
@@ -35,7 +40,7 @@ public class AppController {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodedPassword = encoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
-		System.out.println("okk");
+		// System.out.println("okk");
 		
 		repo.save(user);
 		
@@ -43,33 +48,85 @@ public class AppController {
 	}
 
 
+	@RequestMapping(value = "/list_users", method = RequestMethod.GET)
+  	@ResponseBody
+  	public ModelAndView currentUserName(Principal principal) {
+		String email = principal.getName();
+		User newUser = repo.findByEmail(email);
+		//long id = newUser.getId();
+		// Optional<User> listUsers = repo.findById(id); 
+        //  model.addAttribute("listUsers", listUsers);
+        //  return "users";
+		ModelAndView modelAndView = new ModelAndView("users");
+		ModelAndView mav = modelAndView;
+    	//Optional<User> user = repo.findById(id);
+	
+		mav.addObject("user", newUser);
+		return mav;
+  	}
+	// @GetMapping("/list_users")
+    // public String listAllUsers(Model model) {
+    //     List<User> listUsers = repo.findAll();
+    //     model.addAttribute("listUsers", listUsers);
+    //     return "users";
+    // }
 
-	@GetMapping("/list_users")
-	public String viewUsersList(@ModelAttribute User user, Model model){
-		/*List<User> listUsers = repo.findAll();
-		model.addAttribute("listUsers",listUsers); */
+	// @GetMapping("/book")
+	// public String viewBookingPage(@ModelAttribute User user, Model model) {
 
-		return "users";
+	// 	model.addAttribute("user", user);
+
+
+	// 	return "homepage";
+	// }
+
+	// @GetMapping("/ride")
+	// public String processRide(@ModelAttribute User user, Model model) {
+
+	// 	// model.addAttribute("user", user);
+		
+	// 	// System.out.println("u");
+	// 	// user.getFirstName();
+	// 	// repo.save(user);
+	// 	// User currentUser = repo.findById(user.getId());
+		
+		
+		
+
+	// 	return "ride";
+	// }
+
+	@RequestMapping("/edit/{id}")
+	public ModelAndView showEditProductPage(@PathVariable(name = "id") Long id) {
+
+    ModelAndView modelAndView = new ModelAndView("homepage");
+	ModelAndView mav = modelAndView;
+    Optional<User> user = repo.findById(id);
+	
+	mav.addObject("user", user);
+	return mav;
+    
 	}
 
-	@GetMapping("/book")
-	public String viewBookingPage(@ModelAttribute User user, Model model) {
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public ModelAndView saveProduct(@ModelAttribute("user") User user) {
+		//repo.save(user);
+		long id = user.getId();
+		Optional<User> newUser = repo.findById(id);
 
-		model.addAttribute("user", user);
+		newUser.get().setDestination(user.getDestination());
+		newUser.get().setVehicleType(user.getVehicleType());
 
+		repo.save(newUser.get());
 
-		return "homepage";
+		ModelAndView modelAndView = new ModelAndView("ride");
+		ModelAndView mav = modelAndView;
+    	//Optional<User> user = repo.findById(id);
+	
+		mav.addObject("user", newUser);
+		return mav;
+		//return "ride";
 	}
-
-	@GetMapping("/ride")
-	public String processRide(@ModelAttribute User user, Model model) {
-
-		model.addAttribute("user", user);
-
-
-		return "Ride";
-	}
-
 	// @PutMapping("/ride")
 	// public String processRide(User user) {
 

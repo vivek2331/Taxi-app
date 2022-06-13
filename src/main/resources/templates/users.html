@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>All Users - TaxiApp</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <title>Home Code Login Java</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
 </head>
 <body>
     <div class="container text-center">
@@ -12,16 +12,47 @@
                 <p>
                     Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
                 </p>
-                <input type="submit" value="Log Out" />
+                <input type="submit" value="Sign Out">
             </form>
-
-            <div>
-                <h3><a th:href="@{/book}">Book a Taxi</a></h3>
-            </div>
         </div>
+        
+    </div>
 
+    <div align="center">
+        <h1>Book a Taxi</h1>
+        <br />
+        <form action="#" th:action="@{/save}" th:object="${user}"
+            method="post">
+ 
+            <table border="0" cellpadding="10">
+                <tr>             
+                    <td>User ID:</td>
+                    <td>
+                        <input type="text" th:field="*{id}" readonly="readonly" />
+                    </td>
+                </tr> 
+                
+                <tr>             
+                    <td>User Email</td>
+                    <td>
+                        <input type="text" th:field="*{email}" readonly="readonly" />
+                    </td>
+                </tr>
 
-
+                
+                <tr>
+                    <td>Destination</td>
+                    <td><input type="text" th:field="*{destination}" /></td>
+                </tr>
+                <tr>
+                    <td>Vehicle Type</td>
+                    <td><input type="text" th:field="*{vehicleType}" /></td>
+                </tr>                            
+                <tr>
+                    <td colspan="2"><button type="submit">Ride now</button> </td>
+                </tr>
+            </table>
+        </form>
     </div>
 </body>
 </html>
