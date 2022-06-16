@@ -7,9 +7,15 @@
 </head>
 <body>
     <div class="container text-center">
-        <p>
-            <b>[[${#request.userPrincipal.principal.fullName}]]</b>
-         </p>
+        <div>
+            <form th:action="@{/logout}" method="post">
+                <p>
+                    Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+                </p>
+                <input type="submit" value="Sign Out">
+            </form>
+        </div>
+        
     </div>
 
     <div align="center">
@@ -20,9 +26,14 @@
  
             <table border="0" cellpadding="10">
                 <tr>
+                    <td>Your Pick-up Location</td>
+                    <td><input type="text" th:field="*{pickupLocation}"  readonly="readonly"/></td>
+                </tr>
+                <tr>
                     <td>Your Destination</td>
                     <td><input type="text" th:field="*{destination}"  readonly="readonly"/></td>
                 </tr>
+
                 <tr>
                     <td>Your Vehicle Type</td>
                     <td><input type="text" th:field="*{vehicleType}"  readonly="readonly"/></td>

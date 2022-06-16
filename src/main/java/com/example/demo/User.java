@@ -26,6 +26,9 @@ public class User {
 	@Column(name = "last_name", length = 20)
 	private String lastName;
 
+	@Column(name = "pickup_location",length = 20 )
+	private String pickupLocation;
+
 	@Column(name = "destination",length = 20 )
 	private String destination;
 
@@ -64,6 +67,12 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getPickupLocation() {
+		return pickupLocation;
+	}
+	public void setPickupLocation(String pickupLocation) {
+		this.pickupLocation = pickupLocation;
 	}
 	public String getDestination() {
 		return destination;

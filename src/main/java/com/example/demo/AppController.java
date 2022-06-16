@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.http.ResponseEntity;
 
 // import antlr.collections.List;
 
@@ -37,18 +38,45 @@ public class AppController {
 	
 	@PostMapping("/process_register")
 	public String processRegistration(@Validated User user, BindingResult result, Model model) {
+		// if(repo.existsByEmail(user.getEmail())){
+		// 	return ResponseEntity
+		// 			.badRequest()
+		// 			.body(new MessageResponse("Error: Email is already taken"));
+		// }
+		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodedPassword = encoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 		// System.out.println("okk");
+
+		//User user1 = repo.findByEmail(user.getEmail());
+
+		 if(repo.existsByEmail(user.getEmail())){
+		 	throw new RuntimeException("This Email has already taken");
+		 }
 		
 		repo.save(user);
-		
+	
 		return "register_success";
+		
+		 
+		// return ResponseEntity.ok(new MessageResponse("User registered successfully"))
 	}
 
+// 	@RequestMapping("/process_register")
+// public String showModel(@ModelAttribute User user, Model model){
 
-	@RequestMapping(value = "/list_users", method = RequestMethod.GET)
+
+//     User existedUsername = repo.findByEmail(user.getEmail());
+//     if(existedUsername != null){
+//         model.addAttribute("existedUsername",existedUsername);
+//     }
+
+//     return "registrationstatus";
+
+// }
+
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
   	@ResponseBody
   	public ModelAndView currentUserName(Principal principal) {
 		String email = principal.getName();
@@ -60,11 +88,13 @@ public class AppController {
 		ModelAndView modelAndView = new ModelAndView("users");
 		ModelAndView mav = modelAndView;
     	//Optional<User> user = repo.findById(id);
-	
+		newUser.setPickupLocation(null);
+		newUser.setDestination(null);
+		newUser.setVehicleType(null);
 		mav.addObject("user", newUser);
 		return mav;
   	}
-	// @GetMapping("/list_users")
+	// @GetMapping("/user")
     // public String listAllUsers(Model model) {
     //     List<User> listUsers = repo.findAll();
     //     model.addAttribute("listUsers", listUsers);
@@ -102,6 +132,7 @@ public class AppController {
     ModelAndView modelAndView = new ModelAndView("homepage");
 	ModelAndView mav = modelAndView;
     Optional<User> user = repo.findById(id);
+	//user.get().setPassword(null);
 	
 	mav.addObject("user", user);
 	return mav;
@@ -114,12 +145,37 @@ public class AppController {
 		long id = user.getId();
 		Optional<User> newUser = repo.findById(id);
 
+		newUser.get().setPickupLocation(user.getPickupLocation());
 		newUser.get().setDestination(user.getDestination());
 		newUser.get().setVehicleType(user.getVehicleType());
 
 		repo.save(newUser.get());
 
 		ModelAndView modelAndView = new ModelAndView("ride");
+		ModelAndView mav = modelAndView;
+    	//Optional<User> user = repo.findById(id);
+	
+		mav.addObject("user", newUser);
+		return mav;
+		//return "ride";
+	}
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ModelAndView editProfile(@ModelAttribute("user") User user) {
+		//repo.save(user);
+		long id = user.getId();
+		Optional<User> newUser = repo.findById(id);
+
+		newUser.get().setFirstName(user.getFirstName());
+		newUser.get().setLastName(user.getLastName());
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodedPassword = encoder.encode(user.getPassword());
+		newUser.get().setPassword(encodedPassword);
+		// System.out.println("okk");
+
+		repo.save(newUser.get());
+
+		ModelAndView modelAndView = new ModelAndView("update_success");
 		ModelAndView mav = modelAndView;
     	//Optional<User> user = repo.findById(id);
 	
