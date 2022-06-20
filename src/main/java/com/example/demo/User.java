@@ -1,10 +1,16 @@
 package com.example.demo;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 
 @Entity
@@ -26,65 +32,61 @@ public class User {
 	@Column(name = "last_name", length = 20)
 	private String lastName;
 
-	@Column(name = "pickup_location",length = 20 )
-	private String pickupLocation;
+	@OneToMany(mappedBy = "user" ,cascade = CascadeType.REMOVE)
+	private List<RideDetails> rideDetails;
 
-	@Column(name = "destination",length = 20 )
-	private String destination;
-
-	@Column(name = "vehicle_type",length = 20 )
-	private String vehicleType;
-
-
+	public User(String email, String password, String firstName, String lastName) {
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 	
-	
+	public User(){
+
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getPickupLocation() {
-		return pickupLocation;
+
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setPickupLocation(String pickupLocation) {
-		this.pickupLocation = pickupLocation;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getDestination() {
-		return destination;
+
+	public String getLastName() {
+		return lastName;
 	}
-	public void setDestination(String destination) {
-		this.destination = destination;
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	public String getVehicleType() {
-		return vehicleType;
-	}
-	public void setVehicleType(String vehicleType) {
-		this.vehicleType = vehicleType;
-	}
+
+	
+	
 
 }

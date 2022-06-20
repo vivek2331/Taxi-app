@@ -21,13 +21,13 @@
     <div align="center">
         <h1>Waiting for the Driver to accept the Ride</h1>
         <br />
-        <form th:object="${user}"
+        <form th:object="${rideDetails}"
             >
  
             <table border="0" cellpadding="10">
                 <tr>
                     <td>Your Pick-up Location</td>
-                    <td><input type="text" th:field="*{pickupLocation}"  readonly="readonly"/></td>
+                    <td><input type="text" th:field="*{pickupLoc}"  readonly="readonly"/></td>
                 </tr>
                 <tr>
                     <td>Your Destination</td>
@@ -38,8 +38,16 @@
                     <td>Your Vehicle Type</td>
                     <td><input type="text" th:field="*{vehicleType}"  readonly="readonly"/></td>
                 </tr>
+                <tr>
+                    <td>Fare</td>
+                    <td><input type="text" th:field="*{price}"  readonly="readonly"/></td>
+                </tr>
+                <div class="container text-center"><a th:href="@{/driverDetails}">Driver Details</a></div>
             </table>
+            <div class="container text-center"><a th:href="@{/history}">Booking History</a></div>
         </form>
+
+       
     </div>
 </body>
 </html>

@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home Code Login Java</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <title>Registration - TaxiApp</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+
 </head>
+<style>
+    p,
+label {
+    font: 1rem 'Fira Sans', sans-serif;
+}
+
+input {
+    margin: .4rem;
+}
+
+</style>
 <body>
     <div class="container text-center">
         <div>
@@ -13,51 +25,91 @@
                     Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
                 </p>
                 <input type="submit" value="Sign Out">
+                <div class="container text-center"><a th:href="@{/edit}">Update Your Profile</a></div>
             </form>
         </div>
         
     </div>
+    <div class="container text-center">
+        <div>
+            <h1>Book a Taxi</h1>
+        </div>
+        <div>
+            <form th:action="@{/newRide}" method="post"
+                  style="max-width: 600px; margin: 0 auto;"
+                  th:object="${rideDetails}"
+                  >
 
-    <div align="center">
-        <h1>Book a Taxi</h1>
-        <br />
-        <form action="#" th:action="@{/save}" th:object="${user}"
-            method="post">
- 
-            <table border="0" cellpadding="10">
-                <tr>             
-                    <td>User ID:</td>
-                    <td>
-                        <input type="text" th:field="*{id}" readonly="readonly" />
-                    </td>
-                </tr> 
+                <!-- <div class="form-group row">
+                    <label class="col-form-label col-4">Pick up</label>
+                    <div class="col-8">
+                        <input type="text" class="form-control" th:field="*{pickupLoc}" required
+                               minlength="2" maxlength="20"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label col-4">Destination</label>
+                    <div class="col-8">
+                        <input type="text" class="form-control" th:field="*{destination}" required
+                        minlength="2" maxlength="20"/>
+                    </div>
+                </div> -->
+
+                <!-- <div class="form-group row">
+                    <label class="col-form-label col-4">Vehicle type</label>
+                    <div class="col-8">
+                        <input type="text" class="form-control" th:field="*{vehicleType}" required
+                        minlength="2" maxlength="20"/>
+                    </div>
+                </div> -->
+
+                <select name="pickupLoc" required>  
+                    <option value="">Pick-up Location</option>  
+                    <option value="Bangalore">Bangalore</option>  
+                    <option value="Hyderabad">Hyderabad</option>  
+                    <option value="Chennai">Chennai</option>
+                </select>
+
+                <select name="destination" required>  
+                    <option value="">Select Destination</option>  
+                    <option value="Kochi">Kochi</option>  
+                    <option value="Palakkad">Palakkad</option>
+                    <option value="Mumbai">Mumbai</option>
+                </select>
+
+                <fieldset>
+                    <legend>Choose your vehicle type</legend>
                 
-                <tr>             
-                    <td>User Email</td>
-                    <td>
-                        <input type="text" th:field="*{email}" readonly="readonly" />
-                    </td>
-                </tr>
+                    <div>
+                      <input type="radio"  name="vehicleType" value="car"
+                             checked>
+                      <label for="vehicleType">Car</label>
+                    </div>
+                
+                    <div>
+                      <input type="radio" name="vehicleType" value="auto">
+                      <label for="vehicleType">Auto</label>
+                    </div>
+                
+                    <div>
+                      <input type="radio" name="vehicleType" value="bike">
+                      <label for="vehicleType">Bike</label>
+                    </div>
+                </fieldset>
+                
+                  
 
-                <tr>
-                    <td>Pick-up Location</td>
-                    <td><input type="text" th:field="*{pickupLocation}" required/></td>
-                </tr>
-                <tr>
-                    <td>Destination</td>
-                    <td><input type="text" th:field="*{destination}" required/></td>
-                </tr>
-                <tr>
-                    <td>Vehicle Type</td>
-                    <td><input type="text" th:field="*{vehicleType}" required/></td>
-                </tr>                            
-                <tr>
-                    <td colspan="2"><button type="submit">Ride now</button> </td>
-                </tr>
+                <div>
+                    <button type="submit" class="btn btn-primary">Ride Now</button>
+                </div>
 
-                <div class="container text-center"><a th:href="@{'/edit/' + ${user.id}}">Update Your Profile</a></div>
-            </table>
-        </form>
+            </div>
+            </form>
+        </div>
+
+       
     </div>
+    
 </body>
 </html>

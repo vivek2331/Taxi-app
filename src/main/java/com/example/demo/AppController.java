@@ -23,6 +23,12 @@ public class AppController {
 	
 	@Autowired
 	private UserRepository repo;
+
+	@Autowired
+	private RideDetailsRepository rideRepo;
+
+	@Autowired
+	private DriverRepository driverRepo;
 	
 	@GetMapping("")
 	public String viewHomePage() {
@@ -63,6 +69,29 @@ public class AppController {
 		// return ResponseEntity.ok(new MessageResponse("User registered successfully"))
 	}
 
+	@PostMapping("/newRide")
+	public String bookRide(@Validated RideDetails rideDetails, BindingResult result, Model model, Principal principal){
+		String email = principal.getName();
+		User user = repo.findByEmail(email);
+
+		String pickupLoc = rideDetails.getPickupLoc();
+		String destination = rideDetails.getDestination();
+		String vehicleType = rideDetails.getVehicleType();
+		long price = 100;
+		if(pickupLoc != "Chennai"){
+			price++;
+		}
+		
+
+		RideDetails newRideDetails = new RideDetails(pickupLoc, destination, vehicleType, price, user);
+
+		rideRepo.save(newRideDetails);
+
+		model.addAttribute("rideDetails", newRideDetails);
+
+		return "ride";
+	}
+
 // 	@RequestMapping("/process_register")
 // public String showModel(@ModelAttribute User user, Model model){
 
@@ -76,30 +105,44 @@ public class AppController {
 
 // }
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-  	@ResponseBody
-  	public ModelAndView currentUserName(Principal principal) {
-		String email = principal.getName();
-		User newUser = repo.findByEmail(email);
-		//long id = newUser.getId();
-		// Optional<User> listUsers = repo.findById(id); 
-        //  model.addAttribute("listUsers", listUsers);
-        //  return "users";
-		ModelAndView modelAndView = new ModelAndView("users");
-		ModelAndView mav = modelAndView;
-    	//Optional<User> user = repo.findById(id);
-		newUser.setPickupLocation(null);
-		newUser.setDestination(null);
-		newUser.setVehicleType(null);
-		mav.addObject("user", newUser);
-		return mav;
-  	}
-	// @GetMapping("/user")
-    // public String listAllUsers(Model model) {
-    //     List<User> listUsers = repo.findAll();
-    //     model.addAttribute("listUsers", listUsers);
-    //     return "users";
-    // }
+	// @RequestMapping(value = "/user", method = RequestMethod.GET)
+  	// @ResponseBody
+  	// public ModelAndView currentUserName(Principal principal) {
+	// 	String email = principal.getName();
+	// 	User newUser = repo.findByEmail(email);
+	// 	List<RideDetails> rideDetails = rideRepo.findByUserId(newUser.getId());
+	// 	// rideDetails.setpickupLoc("richmond");
+	// 	// rideDetails.setDestination("bangalore");
+	// 	// rideDetails.setVehicleType("auto");
+	// 	//rideDetails.setUser(newUser);
+
+	// 	//rideRepo.save(rideDetails);
+	// 	//long id = newUser.getId();
+	// 	// Optional<User> listUsers = repo.findById(id); 
+    //     //  model.addAttribute("listUsers", listUsers);
+    //     //  return "users";
+	// 	ModelAndView modelAndView = new ModelAndView("users");
+	// 	ModelAndView mav = modelAndView;
+    // 	//Optional<User> user = repo.findById(id);
+	// 	// newUser.setpickupLoc(null);
+	// 	// newUser.setDestination(null);
+	// 	// newUser.setVehicleType(null);
+	// 	mav.addObject("rideDetails", rideDetails);
+	// 	return mav;
+  	// }
+
+
+
+	@GetMapping("/user")
+    public String listAllUsers(Model model) {
+		// String email = principal.getName();
+		// User user = repo.findByEmail(email);
+		// List<RideDetails> rideDetails = rideRepo.findByUserId(user.getId());
+        //List<RideDetails> listRides = rideRepo.findAll();
+        //model.addAttribute("listRides", rideDetails);
+		model.addAttribute("rideDetails", new RideDetails());
+        return "users";
+    }
 
 	// @GetMapping("/book")
 	// public String viewBookingPage(@ModelAttribute User user, Model model) {
@@ -126,12 +169,14 @@ public class AppController {
 	// 	return "ride";
 	// }
 
-	@RequestMapping("/edit/{id}")
-	public ModelAndView showEditProductPage(@PathVariable(name = "id") Long id) {
+	@RequestMapping("/edit")
+	public ModelAndView showEditProductPage(Principal principal) {
+		String email = principal.getName();
+		User user = repo.findByEmail(email);
 
     ModelAndView modelAndView = new ModelAndView("homepage");
 	ModelAndView mav = modelAndView;
-    Optional<User> user = repo.findById(id);
+    //Optional<User> user = repo.findById(id);
 	//user.get().setPassword(null);
 	
 	mav.addObject("user", user);
@@ -145,9 +190,9 @@ public class AppController {
 		long id = user.getId();
 		Optional<User> newUser = repo.findById(id);
 
-		newUser.get().setPickupLocation(user.getPickupLocation());
-		newUser.get().setDestination(user.getDestination());
-		newUser.get().setVehicleType(user.getVehicleType());
+		// newUser.get().setpickupLoc(user.getpickupLoc());
+		// newUser.get().setDestination(user.getDestination());
+		// newUser.get().setVehicleType(user.getVehicleType());
 
 		repo.save(newUser.get());
 
@@ -216,4 +261,28 @@ public class AppController {
 //	}
 
 
+
+	@RequestMapping("/history")
+	public String bookingHistory(Principal principal, Model model) {
+		String email = principal.getName();
+		User user = repo.findByEmail(email);
+
+		List<RideDetails> rideDetails = rideRepo.findByUserId(user.getId());
+        
+        model.addAttribute("listRides", rideDetails);
+
+	
+		return "booking history";
+
+	}
+
+	@RequestMapping("/driverDetails")
+	public String driverDetails(Model model){
+
+		List<Driver> driver = driverRepo.findAll();
+
+		model.addAttribute("listDrivers", driver);
+
+		return "driverslist";
+	}
 }
