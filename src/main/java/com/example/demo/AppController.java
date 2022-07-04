@@ -34,7 +34,7 @@ public class AppController {
 	public String viewHomePage() {
 		return "index";
 	}
- 
+
 	@GetMapping("/register")
 	public String showSignUpForm(Model model){
 		model.addAttribute("user", new User());
@@ -44,18 +44,14 @@ public class AppController {
 	
 	@PostMapping("/process_register")
 	public String processRegistration(@Validated User user, BindingResult result, Model model) {
-		// if(repo.existsByEmail(user.getEmail())){
-		// 	return ResponseEntity
-		// 			.badRequest()
-		// 			.body(new MessageResponse("Error: Email is already taken"));
-		// }
+		
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodedPassword = encoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 		// System.out.println("okk");
 
-		//User user1 = repo.findByEmail(user.getEmail());
+		
 
 		 if(repo.existsByEmail(user.getEmail())){
 		 	throw new RuntimeException("This Email has already taken");
@@ -92,82 +88,15 @@ public class AppController {
 		return "ride";
 	}
 
-// 	@RequestMapping("/process_register")
-// public String showModel(@ModelAttribute User user, Model model){
-
-
-//     User existedUsername = repo.findByEmail(user.getEmail());
-//     if(existedUsername != null){
-//         model.addAttribute("existedUsername",existedUsername);
-//     }
-
-//     return "registrationstatus";
-
-// }
-
-	// @RequestMapping(value = "/user", method = RequestMethod.GET)
-  	// @ResponseBody
-  	// public ModelAndView currentUserName(Principal principal) {
-	// 	String email = principal.getName();
-	// 	User newUser = repo.findByEmail(email);
-	// 	List<RideDetails> rideDetails = rideRepo.findByUserId(newUser.getId());
-	// 	// rideDetails.setpickupLoc("richmond");
-	// 	// rideDetails.setDestination("bangalore");
-	// 	// rideDetails.setVehicleType("auto");
-	// 	//rideDetails.setUser(newUser);
-
-	// 	//rideRepo.save(rideDetails);
-	// 	//long id = newUser.getId();
-	// 	// Optional<User> listUsers = repo.findById(id); 
-    //     //  model.addAttribute("listUsers", listUsers);
-    //     //  return "users";
-	// 	ModelAndView modelAndView = new ModelAndView("users");
-	// 	ModelAndView mav = modelAndView;
-    // 	//Optional<User> user = repo.findById(id);
-	// 	// newUser.setpickupLoc(null);
-	// 	// newUser.setDestination(null);
-	// 	// newUser.setVehicleType(null);
-	// 	mav.addObject("rideDetails", rideDetails);
-	// 	return mav;
-  	// }
-
 
 
 	@GetMapping("/user")
     public String listAllUsers(Model model) {
-		// String email = principal.getName();
-		// User user = repo.findByEmail(email);
-		// List<RideDetails> rideDetails = rideRepo.findByUserId(user.getId());
-        //List<RideDetails> listRides = rideRepo.findAll();
-        //model.addAttribute("listRides", rideDetails);
+		
 		model.addAttribute("rideDetails", new RideDetails());
         return "users";
     }
 
-	// @GetMapping("/book")
-	// public String viewBookingPage(@ModelAttribute User user, Model model) {
-
-	// 	model.addAttribute("user", user);
-
-
-	// 	return "homepage";
-	// }
-
-	// @GetMapping("/ride")
-	// public String processRide(@ModelAttribute User user, Model model) {
-
-	// 	// model.addAttribute("user", user);
-		
-	// 	// System.out.println("u");
-	// 	// user.getFirstName();
-	// 	// repo.save(user);
-	// 	// User currentUser = repo.findById(user.getId());
-		
-		
-		
-
-	// 	return "ride";
-	// }
 
 	@RequestMapping("/edit")
 	public ModelAndView showEditProductPage(Principal principal) {
@@ -190,9 +119,7 @@ public class AppController {
 		long id = user.getId();
 		Optional<User> newUser = repo.findById(id);
 
-		// newUser.get().setpickupLoc(user.getpickupLoc());
-		// newUser.get().setDestination(user.getDestination());
-		// newUser.get().setVehicleType(user.getVehicleType());
+		
 
 		repo.save(newUser.get());
 
@@ -228,37 +155,6 @@ public class AppController {
 		return mav;
 		//return "ride";
 	}
-	// @PutMapping("/ride")
-	// public String processRide(User user) {
-
-
-	// 	System.out.println("hello");
-
-
-	// 	repo.save(user);
-
-	// 	return "register_success";
-	// }
-
-	// @PutMapping("/update/{id}")
-	// public String updateUser(@PathVariable("id") long id,User user) {
-
-
-	// 	repo.save(user);
-	// 	return "register_success";
-	// }
-//	@PostMapping("/update/{id}")
-//	public String viewRide(@PathVariable("id") long id,@ModelAttribute User user) {
-//		Logger logger = LoggerFactory.getLogger(vi.class);
-//		Optional<User> user1 = repo.findById(id);
-//		logger.info("An INFO Message");
-//
-
-
-//		repo.save(user);
-//		return "homepage" ;
-
-//	}
 
 
 
